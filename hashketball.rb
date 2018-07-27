@@ -217,7 +217,7 @@ def long_name_steals_a_ton?
       end
     end
   end
-new_hash.sort_by {|k, v| k.length}.to_a!
+new_hash.sort_by {|k, v| k.length}.to_a
 # new_arr = new_hash.to_a
 
 new_hash[-1][0] == player_with_longest_name
