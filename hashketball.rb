@@ -49,12 +49,12 @@ def game_hash
 end
 
 def num_points_scored(name)
-    game_hash.each do |awho, nacopl|
-        nacopl[:players].each do |player, stats|
+    game_hash.each do |location, basic|
+        basic[:players].find do |player, stats|
             if player == name
                 stats.each do |things, moreinfo|
                     if things == :points
-                        return moreinfo
+                      return moreinfo
                     end
                 end
             end
@@ -63,8 +63,8 @@ def num_points_scored(name)
 end
 
 def shoe_size(name)
-    game_hash.each do |awho, nacopl|
-        nacopl[:players].each do |player, stats|
+    game_hash.each do |location, basic|
+        basic[:players].each do |player, stats|
             if player == name
                 stats.each do |things, moreinfo|
                     if things == :shoe
@@ -142,8 +142,84 @@ def big_shoe_rebounds
     end
 end
 
+def most_points_scored
+  points_arr = []
+  game_hash.each do |locaiton, basic|
+    basic[:players].each do |name, stats|
+      stats.each do |info, specifics|
+        if info == :points
+          points_arr << specifics
+        end
+      end
+    end
+  end
+  points_arr.sort!
+  
+  game_hash.each do |locaiton, basic|
+    basic[:players].each do |name, stats|
+      stats.each do |info, specifics|
+        if specifics == points_arr[-1]
+          return name 
+        end
+      end
+    end
+  end
+end
 
+def winning_team
+  home = 0
+  away = 0
+  game_hash.each do |location, basic|
+    if location == :home
+      basic[:players].each do |name, info|
+        info.each do |stats, specifics|
+          if stats == :points
+            home += specifics
+          end
+        end
+      end
+    else 
+      basic[:players].each do |name, info|
+        info.each do |stats, specifics|
+          if info == :points
+          away += specifics
+          end
+        end
+      end
+    end
+  end
+    if away > home
+      return game_hash[:away][:team_name]
+    elsif home > away 
+      return game_hash[:home][:team_name]
+    end
+end
 
+def player_with_longest_name
+  name_array = []
+  game_hash.each do |location, basic|
+    basic[:players].each do |name, info|
+      name_array << name 
+    end
+  end
+  
+  name_array.sort_by! {|name| name.length}
+  return name_array[-1]
+  
+end
+    
+def long_name_steals_a_ton? 
+  new_hash = {}
+  game_hash.each do |location, basic|
+    basic[:players].each do |name, info|
+      info.each do |k, v|
+        new_hash[name] = v
+      end
+    end
+  end
+new_hash.sort_by! {|k, v| k.length}
+p new_hash
+end
 
 
 
