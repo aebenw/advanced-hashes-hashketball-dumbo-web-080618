@@ -218,7 +218,7 @@ def long_name_steals_a_ton?
     end
   end
 new_hash.sort_by! {|k, v| k.length}
-p new_hash
+p new_hash.to_a
 end
 
 
